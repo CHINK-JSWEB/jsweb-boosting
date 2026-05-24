@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSWEB Boosting Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --blue: #0057ff;
+  --blue-light: #3d8bff;
+  --blue-glow: rgba(0,87,255,0.35);
+  --cyan: #00e0ff;
+  --bg: #03050f;
+  --bg2: #080d1e;
+  --surface: #0d1530;
+  --surface2: #111c3a;
+  --text: #e8eeff;
+  --muted: #7a8bb5;
+  --border: rgba(61,139,255,0.18);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ===== NOISE OVERLAY ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.5;
+}
+
+/* ===== SCROLL GLOW BG ===== */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+}
+.orb1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,87,255,0.15), transparent 70%); top: -200px; left: -100px; }
+.orb2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,224,255,0.08), transparent 70%); bottom: 20%; right: -150px; }
+
+/* ===== NAV ===== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(3,5,15,0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-logo span { color: var(--blue-light); }
+
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: var(--blue);
+  color: white;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: 0.3s;
+  box-shadow: 0 0 20px var(--blue-glow);
+}
+.nav-cta:hover { background: var(--blue-light); transform: scale(1.04); }
+
+/* ===== HERO LOGO ===== */
+.hero-logo-wrap {
+  margin-bottom: 28px;
+  animation: fadeUp 0.7s ease both;
+}
+.hero-logo {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(61,139,255,0.5);
+  box-shadow: 0 0 40px rgba(0,87,255,0.5), 0 0 80px rgba(0,87,255,0.2);
+  transition: 0.4s;
+}
+.hero-logo:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 60px rgba(0,87,255,0.7), 0 0 100px rgba(0,87,255,0.3);
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 20px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,87,255,0.12);
+  border: 1px solid rgba(0,87,255,0.35);
+  border-radius: 50px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blue-light);
+  margin-bottom: 30px;
+  animation: fadeUp 0.8s ease both;
+}
+.badge-dot {
+  width: 7px; height: 7px;
+  background: #00ff88;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.5; transform:scale(1.4); }
+}
+
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 10vw, 110px);
+  line-height: 0.9;
+  letter-spacing: 3px;
+  animation: fadeUp 0.9s 0.1s ease both;
+}
+.hero h1 .accent { color: var(--blue-light); }
+.hero h1 .outline {
+  -webkit-text-stroke: 2px var(--blue-light);
+  color: transparent;
+}
+
+.hero-sub {
+  margin-top: 25px;
+  font-size: clamp(15px, 2vw, 19px);
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.7;
+  animation: fadeUp 1s 0.2s ease both;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 15px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp 1s 0.3s ease both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 36px;
+  background: var(--blue);
+  color: white;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  transition: 0.3s;
+  box-shadow: 0 0 40px var(--blue-glow);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 60px var(--blue-glow); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 36px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.btn-secondary:hover { border-color: var(--blue-light); color: var(--blue-light); transform: translateY(-3px); }
+
+/* STATS */
+.stats-row {
+  display: flex;
+  gap: 40px;
+  margin-top: 70px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp 1s 0.5s ease both;
+}
+.stat {
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  color: white;
+  line-height: 1;
+}
+.stat-num span { color: var(--blue-light); }
+.stat-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* SCROLL INDICATOR */
+.scroll-hint {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  animation: bounce 2s infinite;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, transparent, var(--blue-light));
+}
+@keyframes bounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(30px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+/* ===== SECTION ===== */
+.section {
+  position: relative;
+  padding: 90px 20px;
+  z-index: 1;
+}
+
+.section-label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  margin-bottom: 14px;
+}
+
+.section-title {
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 6vw, 60px);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.section-desc {
+  text-align: center;
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 540px;
+  margin: 0 auto 55px;
+  line-height: 1.7;
+}
+
+/* ===== MAIN PLATFORMS ===== */
+.main-platforms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.platform-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.platform-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,87,255,0.07), transparent 60%);
+  opacity: 0;
+  transition: 0.35s;
+}
+.platform-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(61,139,255,0.45);
+  box-shadow: 0 20px 60px rgba(0,87,255,0.2);
+}
+.platform-card:hover::before { opacity: 1; }
+
+.platform-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,87,255,0.12);
+  border: 1px solid rgba(61,139,255,0.3);
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  margin-bottom: 20px;
+}
+
+.platform-icon-wrap {
+  width: 60px; height: 60px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.fb-icon { background: linear-gradient(135deg, #1877f2, #0a5dc9); }
+.ig-icon { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
+.tt-icon { background: linear-gradient(135deg, #010101, #ff0050); }
+
+.platform-icon-wrap svg { width: 30px; height: 30px; fill: white; }
+
+.platform-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.platform-tag {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.services-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.services-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: #c8d4f0;
+}
+.check {
+  width: 20px; height: 20px;
+  background: rgba(0,87,255,0.2);
+  border: 1px solid rgba(61,139,255,0.4);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.check svg { width: 11px; height: 11px; fill: var(--blue-light); }
+
+.more-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--blue-light);
+  font-weight: 600;
+}
+
+/* ===== ADDITIONAL PLATFORMS ===== */
+.addl-section { background: var(--bg2); }
+
+.addl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.addl-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  transition: 0.3s;
+  cursor: default;
+}
+.addl-card:hover {
+  border-color: rgba(61,139,255,0.45);
+  background: var(--surface2);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,87,255,0.15);
+}
+.addl-icon {
+  width: 44px; height: 44px;
+  border-radius: 13px;
+  background: rgba(0,87,255,0.13);
+  border: 1px solid rgba(61,139,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.addl-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.5px;
+}
+
+/* ===== WHY US ===== */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.why-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 30px 26px;
+  transition: 0.3s;
+}
+.why-card:hover {
+  border-color: rgba(61,139,255,0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0,87,255,0.15);
+}
+.why-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+.why-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.why-card p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ===== MISSION/VISION ===== */
+.mv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media(max-width:650px){ .mv-grid { grid-template-columns:1fr; } }
+
+.mv-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.mv-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+}
+.mv-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px;
+  color: rgba(255,255,255,0.04);
+  position: absolute;
+  bottom: 10px; right: 20px;
+  line-height: 1;
+  pointer-events: none;
+}
+.mv-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  margin-bottom: 14px;
+}
+.mv-card h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 1.5px;
+  margin-bottom: 16px;
+}
+.mv-card p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* ===== CTA ===== */
+.cta-section {
+  padding: 90px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 700px; height: 400px;
+  background: radial-gradient(ellipse, rgba(0,87,255,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-box {
+  background: var(--surface);
+  border: 1px solid rgba(61,139,255,0.3);
+  border-radius: 36px;
+  padding: 70px 40px;
+  max-width: 680px;
+  margin: 0 auto;
+  position: relative;
+}
+.cta-box h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px,6vw,58px);
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+.cta-box p {
+  color: var(--muted);
+  font-size: 16px;
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 40px 20px;
+  text-align: center;
+}
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: white;
+  margin-bottom: 8px;
+}
+.footer-logo span { color: var(--blue-light); }
+footer p {
+  font-size: 13px;
+  color: var(--muted);
+}
+.footer-divider {
+  width: 60px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--blue), transparent);
+  margin: 16px auto;
+}
+
+/* ===== DIVIDER ===== */
+.divider {
+  width: 60px; height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  border-radius: 10px;
+  margin: 14px auto 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  nav { padding: 14px 20px; }
+  .stats-row { gap: 24px; }
+  .addl-grid { grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="assets/logo.png" alt="logo" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(61,139,255,0.5);">
+    JS<span>WEB</span>
+  </div>
+  <a class="nav-cta" href="https://facebook.com" target="_blank">
+    <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
+    Message Us
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-logo-wrap">
+    <img src="assets/logo.png" alt="JSWEB Boosting Services Logo" class="hero-logo">
+  </div>
+
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    Now Serving Clients Nationwide
+  </div>
+
+  <h1>
+    <span class="accent">GROW</span><br>
+    YOUR <span class="outline">SOCIAL</span><br>
+    PRESENCE
+  </h1>
+
+  <p class="hero-sub">
+    Fast, safe, and affordable boosting services for Facebook, Instagram, TikTok, and 14+ more platforms.
+  </p>
+
+  <div class="hero-btns">
+    <a class="btn-primary" href="https://facebook.com" target="_blank">
+      💬 Order Now
+    </a>
+    <a class="btn-secondary" href="#services">
+      View Services ↓
+    </a>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num">17<span>+</span></div>
+      <div class="stat-label">Platforms</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100<span>%</span></div>
+      <div class="stat-label">Safe & Secure</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">24<span>/7</span></div>
+      <div class="stat-label">Support</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">Fast<span>⚡</span></div>
+      <div class="stat-label">Delivery</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- MAIN SERVICES -->
+<section class="section" id="services">
+  <p class="section-label">🔥 Top Platforms</p>
+  <h2 class="section-title">Our Core Services</h2>
+  <div class="divider"></div>
+  <p class="section-desc">Premium boosting for the biggest platforms. Real engagement, fast delivery, affordable rates.</p>
+
+  <div class="main-platforms">
+
+    <!-- FACEBOOK -->
+    <div class="platform-card">
+      <div class="platform-badge">
+        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
+        Account & Page
+      </div>
+      <div class="platform-icon-wrap fb-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
+      </div>
+      <div class="platform-name">Facebook</div>
+      <div class="platform-tag">Account / Page / Post Boosting</div>
+      <ul class="services-list">
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Followers</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Reacts</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Shares</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Views</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Comments & Comment Reacts</li>
+      </ul>
+      <div class="more-badge">🚀 And many more services</div>
+    </div>
+
+    <!-- INSTAGRAM -->
+    <div class="platform-card">
+      <div class="platform-badge">
+        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h10zm-5 3.5A5.5 5.5 0 1 0 17.5 13 5.5 5.5 0 0 0 12 7.5zm0 2A3.5 3.5 0 1 1 8.5 13 3.5 3.5 0 0 1 12 9.5zm5.75-3a1.25 1.25 0 1 0 1.25 1.25A1.25 1.25 0 0 0 17.75 6.5z"/></svg>
+        Profile Boost
+      </div>
+      <div class="platform-icon-wrap ig-icon">
+        <svg viewBox="0 0 24 24"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h10zm-5 3.5A5.5 5.5 0 1 0 17.5 13 5.5 5.5 0 0 0 12 7.5zm0 2A3.5 3.5 0 1 1 8.5 13 3.5 3.5 0 0 1 12 9.5zm5.75-3a1.25 1.25 0 1 0 1.25 1.25A1.25 1.25 0 0 0 17.75 6.5z"/></svg>
+      </div>
+      <div class="platform-name">Instagram</div>
+      <div class="platform-tag">Profile / Reel / Post Boosting</div>
+      <ul class="services-list">
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Followers</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Likes / Reacts</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Views</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Engagement</li>
+      </ul>
+      <div class="more-badge">🚀 And many more services</div>
+    </div>
+
+    <!-- TIKTOK -->
+    <div class="platform-card">
+      <div class="platform-badge">
+        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 0-3.77-1.52v3.3a1.84 1.84 0 0 1 1.29.51 1.8 1.8 0 0 1 .54 1.3v4.89a4.89 4.89 0 1 1-4.89-4.89h.22v3.31a1.57 1.57 0 1 0 1.57 1.58V2h3.27a4.84 4.84 0 0 0 1.77 3.63z"/></svg>
+        Content Boost
+      </div>
+      <div class="platform-icon-wrap tt-icon">
+        <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 0-3.77-1.52v3.3a1.84 1.84 0 0 1 1.29.51 1.8 1.8 0 0 1 .54 1.3v4.89a4.89 4.89 0 1 1-4.89-4.89h.22v3.31a1.57 1.57 0 1 0 1.57 1.58V2h3.27a4.84 4.84 0 0 0 1.77 3.63z"/></svg>
+      </div>
+      <div class="platform-name">TikTok</div>
+      <div class="platform-tag">Profile / Video / Live Boosting</div>
+      <ul class="services-list">
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Followers</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Heart Reacts / Likes</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Shares</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Views</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Comment Reacts</li>
+      </ul>
+      <div class="more-badge">🚀 And many more services</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ADDITIONAL PLATFORMS -->
+<section class="section addl-section" id="platforms">
+  <p class="section-label">✅ Additional Services</p>
+  <h2 class="section-title">More Platforms</h2>
+  <div class="divider"></div>
+  <p class="section-desc">We don't stop at the big three. Boost your presence across every major platform.</p>
+
+  <div class="addl-grid">
+    <div class="addl-card"><div class="addl-icon">✈️</div><div class="addl-name">Telegram</div></div>
+    <div class="addl-card"><div class="addl-icon">⚔️</div><div class="addl-name">Mobile Legends</div></div>
+    <div class="addl-card"><div class="addl-icon">🔴</div><div class="addl-name">Reddit</div></div>
+    <div class="addl-card"><div class="addl-icon">🐦</div><div class="addl-name">X / Twitter</div></div>
+    <div class="addl-card"><div class="addl-icon">▶️</div><div class="addl-name">YouTube</div></div>
+    <div class="addl-card"><div class="addl-icon">💬</div><div class="addl-name">WhatsApp</div></div>
+    <div class="addl-card"><div class="addl-icon">🎮</div><div class="addl-name">Twitch</div></div>
+    <div class="addl-card"><div class="addl-icon">🎵</div><div class="addl-name">Spotify</div></div>
+    <div class="addl-card"><div class="addl-icon">💼</div><div class="addl-name">LinkedIn</div></div>
+    <div class="addl-card"><div class="addl-icon">🟢</div><div class="addl-name">Kick.com</div></div>
+    <div class="addl-card"><div class="addl-icon">🛍️</div><div class="addl-name">Shopee</div></div>
+    <div class="addl-card"><div class="addl-icon">🎭</div><div class="addl-name">Discord</div></div>
+    <div class="addl-card"><div class="addl-icon">🧵</div><div class="addl-name">Threads</div></div>
+    <div class="addl-card"><div class="addl-icon">🎲</div><div class="addl-name">Roblox</div></div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="section">
+  <p class="section-label">💎 Why Choose Us</p>
+  <h2 class="section-title">What Makes Us Different</h2>
+  <div class="divider"></div>
+  <p class="section-desc">We've built a reputation for quality, speed, and trust.</p>
+
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">⚡</div>
+      <h3>Fast Delivery</h3>
+      <p>Orders start processing immediately. Most services deliver within minutes to hours.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🔒</div>
+      <h3>Safe & Secure</h3>
+      <p>No passwords needed. We work strictly within platform-safe methods.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💸</div>
+      <h3>Affordable Rates</h3>
+      <p>Competitive pricing that fits any budget — from starters to big creators.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🎯</div>
+      <h3>High Quality</h3>
+      <p>Real-looking engagement that helps you build genuine credibility online.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🤝</div>
+      <h3>Trusted Service</h3>
+      <p>Hundreds of satisfied clients. We're here for the long run, not a one-time deal.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📱</div>
+      <h3>24/7 Support</h3>
+      <p>Got questions? Message us anytime on Facebook. We respond fast.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION / VISION -->
+<section class="section addl-section">
+  <p class="section-label">🌟 Who We Are</p>
+  <h2 class="section-title">Mission & Vision</h2>
+  <div class="divider"></div>
+  <p class="section-desc" style="margin-bottom: 40px;"></p>
+
+  <div class="mv-grid">
+    <div class="mv-card">
+      <div class="mv-num">01</div>
+      <div class="mv-label">Our Mission</div>
+      <h3>Why We Exist</h3>
+      <p>To provide fast, reliable, affordable, and high-quality social media boosting services that help individuals, businesses, content creators, streamers, and entrepreneurs grow their digital presence — with excellent support, secure transactions, and consistent results.</p>
+    </div>
+    <div class="mv-card">
+      <div class="mv-num">02</div>
+      <div class="mv-label">Our Vision</div>
+      <h3>Where We're Headed</h3>
+      <p>To become one of the most trusted social media boosting providers in the digital industry — continuously improving, maintaining client satisfaction, and helping people unlock greater opportunities online through modern, effective growth solutions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-box">
+    <h2>READY TO GROW?</h2>
+    <p>Message us on Facebook now and let's talk about the best service for your needs. Fast response, no BS.</p>
+    <a class="btn-primary" href="https://facebook.com" target="_blank" style="font-size:17px; padding:18px 44px;">
+      💬 Message Us on Facebook
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">JS<span>WEB</span> Boosting Services</div>
+  <p>Fast • Safe • Affordable Social Media Boosting</p>
+  <div class="footer-divider"></div>
+  <p>© 2026 JSWEB Boosting Services. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
+
