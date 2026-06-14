@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
 :root {
   --blue: #0057ff;
@@ -22,702 +21,498 @@
   --muted: #7a8bb5;
   --border: rgba(61,139,255,0.18);
 }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Outfit', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  overflow-x: hidden;
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1000;opacity:0.5;
 }
 
-/* ===== NOISE OVERLAY ===== */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 1000;
-  opacity: 0.5;
+.bg-orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;}
+.orb1{width:600px;height:600px;background:radial-gradient(circle,rgba(0,87,255,0.15),transparent 70%);top:-200px;left:-100px;}
+.orb2{width:500px;height:500px;background:radial-gradient(circle,rgba(0,224,255,0.08),transparent 70%);bottom:20%;right:-150px;}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:14px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(3,5,15,0.88);backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;
+  color:white;display:flex;align-items:center;gap:10px;text-decoration:none;
+}
+.nav-logo span{color:var(--blue-light);}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{
+  color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;
+  padding:8px 13px;border-radius:10px;transition:0.2s;
+}
+.nav-links a:hover{color:white;background:rgba(61,139,255,0.1);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 20px;background:var(--blue);color:white;
+  border-radius:50px;font-weight:600;font-size:13px;text-decoration:none;
+  transition:0.3s;box-shadow:0 0 20px var(--blue-glow);
+}
+.nav-cta:hover{background:var(--blue-light);transform:scale(1.04);}
+.burger{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:38px;height:38px;background:rgba(61,139,255,0.1);
+  border:1px solid var(--border);border-radius:10px;
+  cursor:pointer;padding:8px;transition:0.3s;
+}
+.burger:hover{background:rgba(61,139,255,0.2);}
+.burger span{display:block;width:100%;height:2px;background:white;border-radius:2px;transition:0.3s;}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.burger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+.mobile-menu{
+  display:none;position:fixed;top:65px;left:0;right:0;
+  background:rgba(3,5,15,0.97);backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);z-index:199;
+  padding:16px 20px 24px;flex-direction:column;gap:4px;
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{
+  color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;
+  padding:12px 14px;border-radius:12px;display:flex;align-items:center;gap:12px;
+  transition:0.2s;border:1px solid transparent;
+}
+.mobile-menu a:hover{color:white;background:rgba(61,139,255,0.1);border-color:var(--border);}
+.mob-icon{
+  width:32px;height:32px;background:rgba(0,87,255,0.15);
+  border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.mob-icon svg{width:15px;height:15px;fill:var(--blue-light);}
+.mob-divider{height:1px;background:var(--border);margin:8px 0;}
+.mob-cta{
+  background:var(--blue)!important;color:white!important;
+  justify-content:center;border-radius:14px!important;
+  font-weight:700!important;box-shadow:0 0 24px var(--blue-glow);
+  border-color:transparent!important;margin-top:4px;
+}
+.mob-cta:hover{background:var(--blue-light)!important;}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .burger{display:flex;}
 }
 
-/* ===== SCROLL GLOW BG ===== */
-.bg-orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(100px);
-  pointer-events: none;
-  z-index: 0;
+/* HERO */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:120px 20px 80px;position:relative;overflow:hidden;
 }
-.orb1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,87,255,0.15), transparent 70%); top: -200px; left: -100px; }
-.orb2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,224,255,0.08), transparent 70%); bottom: 20%; right: -150px; }
+.hero-logo-wrap{margin-bottom:28px;animation:fadeUp 0.7s ease both;}
+.hero-logo{
+  width:160px;height:160px;border-radius:50%;object-fit:cover;
+  border:3px solid rgba(61,139,255,0.5);
+  box-shadow:0 0 40px rgba(0,87,255,0.5),0 0 80px rgba(0,87,255,0.2);
+  transition:0.4s;
+}
+.hero-logo:hover{transform:scale(1.06);box-shadow:0 0 60px rgba(0,87,255,0.7),0 0 100px rgba(0,87,255,0.3);}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,87,255,0.12);border:1px solid rgba(0,87,255,0.35);
+  border-radius:50px;padding:8px 20px;font-size:13px;font-weight:500;
+  color:var(--blue-light);margin-bottom:30px;animation:fadeUp 0.8s ease both;
+}
+.badge-dot{width:7px;height:7px;background:#00ff88;border-radius:50%;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.4);}}
+.hero h1{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,10vw,110px);
+  line-height:0.9;letter-spacing:3px;animation:fadeUp 0.9s 0.1s ease both;
+}
+.hero h1 .accent{color:var(--blue-light);}
+.hero h1 .outline{-webkit-text-stroke:2px var(--blue-light);color:transparent;}
+.hero-sub{
+  margin-top:25px;font-size:clamp(15px,2vw,19px);color:var(--muted);
+  max-width:560px;line-height:1.7;animation:fadeUp 1s 0.2s ease both;
+}
+.hero-btns{
+  display:flex;gap:15px;margin-top:40px;flex-wrap:wrap;
+  justify-content:center;animation:fadeUp 1s 0.3s ease both;
+}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 36px;background:var(--blue);color:white;
+  border-radius:50px;font-weight:700;font-size:16px;text-decoration:none;
+  transition:0.3s;box-shadow:0 0 40px var(--blue-glow);
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 60px var(--blue-glow);}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 36px;background:transparent;color:var(--text);
+  border:1px solid var(--border);border-radius:50px;font-weight:600;
+  font-size:16px;text-decoration:none;transition:0.3s;
+}
+.btn-secondary:hover{border-color:var(--blue-light);color:var(--blue-light);transform:translateY(-3px);}
+.stats-row{
+  display:flex;gap:40px;margin-top:70px;flex-wrap:wrap;
+  justify-content:center;animation:fadeUp 1s 0.5s ease both;
+}
+.stat{text-align:center;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:38px;color:white;line-height:1;}
+.stat-num span{color:var(--blue-light);}
+.stat-label{font-size:13px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1px;}
+.scroll-hint{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  color:var(--muted);font-size:12px;animation:bounce 2s infinite;
+}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--blue-light));}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
 
-/* ===== NAV ===== */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 18px 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(3,5,15,0.7);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
+/* SECTION */
+.section{position:relative;padding:90px 20px;z-index:1;}
+.section-label{text-align:center;font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--blue-light);margin-bottom:14px;}
+.section-title{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,60px);letter-spacing:2px;margin-bottom:12px;}
+.section-desc{text-align:center;color:var(--muted);font-size:16px;max-width:540px;margin:0 auto 55px;line-height:1.7;}
+.divider{width:60px;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:10px;margin:14px auto 0;}
 
-.nav-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 26px;
-  letter-spacing: 2px;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* MAIN PLATFORMS */
+.main-platforms{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;max-width:1100px;margin:0 auto;}
+.platform-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:28px;
+  padding:36px 32px;position:relative;overflow:hidden;
+  transition:0.35s cubic-bezier(0.4,0,0.2,1);
 }
-.nav-logo span { color: var(--blue-light); }
+.platform-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,87,255,0.07),transparent 60%);
+  opacity:0;transition:0.35s;
+}
+.platform-card:hover{transform:translateY(-8px);border-color:rgba(61,139,255,0.45);box-shadow:0 20px 60px rgba(0,87,255,0.2);}
+.platform-card:hover::before{opacity:1;}
+.platform-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,87,255,0.12);border:1px solid rgba(61,139,255,0.3);
+  border-radius:50px;padding:6px 14px;font-size:11px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--blue-light);margin-bottom:20px;
+}
+.platform-icon-wrap{width:60px;height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+.fb-icon{background:linear-gradient(135deg,#1877f2,#0a5dc9);}
+.ig-icon{background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af);}
+.tt-icon{background:linear-gradient(135deg,#010101,#ff0050);}
+.platform-icon-wrap svg{width:30px;height:30px;fill:white;}
+.platform-name{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-bottom:6px;}
+.platform-tag{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.services-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.services-list li{display:flex;align-items:center;gap:10px;font-size:15px;color:#c8d4f0;}
+.check{
+  width:20px;height:20px;background:rgba(0,87,255,0.2);
+  border:1px solid rgba(61,139,255,0.4);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.check svg{width:11px;height:11px;fill:var(--blue-light);}
+.more-badge{display:inline-flex;align-items:center;gap:6px;margin-top:18px;font-size:13px;color:var(--blue-light);font-weight:600;}
 
-.nav-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 22px;
-  background: var(--blue);
-  color: white;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 14px;
-  text-decoration: none;
-  transition: 0.3s;
-  box-shadow: 0 0 20px var(--blue-glow);
+/* ADDITIONAL PLATFORMS */
+.addl-section{background:var(--bg2);}
+.addl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;max-width:1000px;margin:0 auto;}
+.addl-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:18px;
+  padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;
+  text-align:center;transition:0.3s;cursor:default;
 }
-.nav-cta:hover { background: var(--blue-light); transform: scale(1.04); }
+.addl-card:hover{border-color:rgba(61,139,255,0.45);background:var(--surface2);transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,87,255,0.15);}
+.addl-icon{
+  width:44px;height:44px;border-radius:13px;
+  background:rgba(0,87,255,0.13);border:1px solid rgba(61,139,255,0.25);
+  display:flex;align-items:center;justify-content:center;
+}
+.addl-icon svg{width:22px;height:22px;fill:var(--blue-light);}
+.addl-name{font-size:13px;font-weight:600;color:var(--text);letter-spacing:0.5px;}
 
-/* ===== HERO LOGO ===== */
-.hero-logo-wrap {
-  margin-bottom: 28px;
-  animation: fadeUp 0.7s ease both;
-}
-.hero-logo {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid rgba(61,139,255,0.5);
-  box-shadow: 0 0 40px rgba(0,87,255,0.5), 0 0 80px rgba(0,87,255,0.2);
-  transition: 0.4s;
-}
-.hero-logo:hover {
-  transform: scale(1.06);
-  box-shadow: 0 0 60px rgba(0,87,255,0.7), 0 0 100px rgba(0,87,255,0.3);
-}
+/* WHY US */
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:1000px;margin:0 auto;}
+.why-card{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:30px 26px;transition:0.3s;}
+.why-card:hover{border-color:rgba(61,139,255,0.4);transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,87,255,0.15);}
+.why-icon{width:44px;height:44px;border-radius:13px;background:rgba(0,87,255,0.13);border:1px solid rgba(61,139,255,0.25);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.why-icon svg{width:22px;height:22px;fill:var(--blue-light);}
+.why-card h3{font-size:17px;font-weight:700;margin-bottom:8px;}
+.why-card p{font-size:14px;color:var(--muted);line-height:1.6;}
 
-/* ===== HERO ===== */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 120px 20px 80px;
-  position: relative;
-  overflow: hidden;
-}
+/* MISSION VISION */
+.mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:900px;margin:0 auto;}
+@media(max-width:650px){.mv-grid{grid-template-columns:1fr;}}
+.mv-card{background:var(--surface);border:1px solid var(--border);border-radius:26px;padding:40px 36px;position:relative;overflow:hidden;}
+.mv-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan));}
+.mv-num{font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(255,255,255,0.04);position:absolute;bottom:10px;right:20px;line-height:1;pointer-events:none;}
+.mv-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--blue-light);margin-bottom:14px;}
+.mv-card h3{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1.5px;margin-bottom:16px;}
+.mv-card p{font-size:15px;color:var(--muted);line-height:1.8;}
 
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(0,87,255,0.12);
-  border: 1px solid rgba(0,87,255,0.35);
-  border-radius: 50px;
-  padding: 8px 20px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--blue-light);
-  margin-bottom: 30px;
-  animation: fadeUp 0.8s ease both;
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:24px;max-width:950px;margin:0 auto;}
+.pricing-card{background:var(--surface);border:1px solid var(--border);border-radius:26px;padding:32px 28px;position:relative;transition:0.3s;}
+.pricing-card:hover{transform:translateY(-6px);border-color:rgba(61,139,255,0.4);box-shadow:0 16px 50px rgba(0,87,255,0.15);}
+.pricing-card.featured{border-color:rgba(61,139,255,0.5);background:var(--surface2);box-shadow:0 0 40px rgba(0,87,255,0.12);}
+.pricing-popular{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(90deg,var(--blue),var(--cyan));color:white;
+  font-size:12px;font-weight:700;padding:5px 18px;border-radius:50px;white-space:nowrap;
 }
-.badge-dot {
-  width: 7px; height: 7px;
-  background: #00ff88;
-  border-radius: 50%;
-  animation: pulse 1.5s infinite;
+.pricing-platform{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px;margin-bottom:20px;color:var(--text);display:flex;align-items:center;gap:10px;}
+.pricing-platform svg{width:22px;height:22px;fill:var(--blue-light);}
+.pricing-rows{display:flex;flex-direction:column;gap:12px;}
+.pricing-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;background:rgba(0,87,255,0.06);
+  border:1px solid var(--border);border-radius:10px;font-size:14px;color:#c8d4f0;
 }
-@keyframes pulse {
-  0%,100% { opacity:1; transform:scale(1); }
-  50% { opacity:0.5; transform:scale(1.4); }
-}
+.price{font-weight:700;color:var(--blue-light);font-size:15px;}
+.pricing-note{margin-top:16px;font-size:12px;color:var(--muted);text-align:center;}
 
-.hero h1 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(52px, 10vw, 110px);
-  line-height: 0.9;
-  letter-spacing: 3px;
-  animation: fadeUp 0.9s 0.1s ease both;
+/* HOW TO ORDER */
+.steps-wrap{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;max-width:1050px;margin:0 auto;}
+.step-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:24px;
+  padding:32px 24px;text-align:center;flex:1;min-width:190px;max-width:220px;
+  position:relative;transition:0.3s;
 }
-.hero h1 .accent { color: var(--blue-light); }
-.hero h1 .outline {
-  -webkit-text-stroke: 2px var(--blue-light);
-  color: transparent;
-}
-
-.hero-sub {
-  margin-top: 25px;
-  font-size: clamp(15px, 2vw, 19px);
-  color: var(--muted);
-  max-width: 560px;
-  line-height: 1.7;
-  animation: fadeUp 1s 0.2s ease both;
-}
-
-.hero-btns {
-  display: flex;
-  gap: 15px;
-  margin-top: 40px;
-  flex-wrap: wrap;
-  justify-content: center;
-  animation: fadeUp 1s 0.3s ease both;
-}
-
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 16px 36px;
-  background: var(--blue);
-  color: white;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 16px;
-  text-decoration: none;
-  transition: 0.3s;
-  box-shadow: 0 0 40px var(--blue-glow);
-}
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 60px var(--blue-glow); }
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 16px 36px;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 16px;
-  text-decoration: none;
-  transition: 0.3s;
-}
-.btn-secondary:hover { border-color: var(--blue-light); color: var(--blue-light); transform: translateY(-3px); }
-
-/* STATS */
-.stats-row {
-  display: flex;
-  gap: 40px;
-  margin-top: 70px;
-  flex-wrap: wrap;
-  justify-content: center;
-  animation: fadeUp 1s 0.5s ease both;
-}
-.stat {
-  text-align: center;
-}
-.stat-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 38px;
-  color: white;
-  line-height: 1;
-}
-.stat-num span { color: var(--blue-light); }
-.stat-label {
-  font-size: 13px;
-  color: var(--muted);
-  margin-top: 4px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.step-card:hover{transform:translateY(-6px);border-color:rgba(61,139,255,0.4);box-shadow:0 12px 40px rgba(0,87,255,0.15);}
+.step-num{position:absolute;top:14px;right:16px;font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(255,255,255,0.05);line-height:1;}
+.step-icon-wrap{width:52px;height:52px;border-radius:16px;background:rgba(0,87,255,0.13);border:1px solid rgba(61,139,255,0.25);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.step-icon-wrap svg{width:24px;height:24px;fill:var(--blue-light);}
+.step-card h3{font-size:16px;font-weight:700;margin-bottom:8px;}
+.step-card p{font-size:13px;color:var(--muted);line-height:1.6;}
+.step-arrow{color:var(--blue-light);flex-shrink:0;}
+.step-arrow svg{width:24px;height:24px;fill:var(--blue-light);}
+@media(max-width:700px){
+  .steps-wrap{flex-direction:column;align-items:center;}
+  .step-card{max-width:100%;width:100%;}
+  .step-arrow{transform:rotate(90deg);}
 }
 
-/* SCROLL INDICATOR */
-.scroll-hint {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 12px;
-  animation: bounce 2s infinite;
-}
-.scroll-line {
-  width: 1px; height: 40px;
-  background: linear-gradient(to bottom, transparent, var(--blue-light));
-}
-@keyframes bounce {
-  0%,100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(6px); }
-}
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;max-width:1000px;margin:0 auto;}
+.testi-card{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:28px 26px;transition:0.3s;}
+.testi-card:hover{transform:translateY(-5px);border-color:rgba(61,139,255,0.4);box-shadow:0 12px 40px rgba(0,87,255,0.15);}
+.testi-stars{display:flex;gap:4px;margin-bottom:14px;}
+.testi-stars svg{width:16px;height:16px;fill:#fbbf24;}
+.testi-text{font-size:14px;color:#c8d4f0;line-height:1.8;margin-bottom:20px;font-style:italic;}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0;}
+.testi-name{font-size:14px;font-weight:700;}
+.testi-platform{font-size:12px;color:var(--muted);margin-top:2px;}
 
-@keyframes fadeUp {
-  from { opacity:0; transform: translateY(30px); }
-  to { opacity:1; transform: translateY(0); }
-}
+/* FAQ */
+.faq-wrap{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:0.3s;}
+.faq-item:hover{border-color:rgba(61,139,255,0.35);}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;cursor:pointer;font-size:15px;font-weight:600;gap:12px;user-select:none;}
+.faq-icon{width:28px;height:28px;background:rgba(0,87,255,0.13);border:1px solid rgba(61,139,255,0.25);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:0.3s;}
+.faq-icon svg{width:14px;height:14px;fill:var(--blue-light);transition:0.3s;}
+.faq-q.open .faq-icon svg{transform:rotate(45deg);}
+.faq-a{display:none;padding:0 22px 18px;font-size:14px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:14px;margin-top:0;}
+.faq-a.open{display:block;}
 
-/* ===== SECTION ===== */
-.section {
-  position: relative;
-  padding: 90px 20px;
-  z-index: 1;
+/* CONTACT */
+.contact-wrap{display:grid;grid-template-columns:1fr 320px;gap:28px;max-width:950px;margin:0 auto;}
+@media(max-width:750px){.contact-wrap{grid-template-columns:1fr;}}
+.contact-form-box{background:var(--surface);border:1px solid var(--border);border-radius:26px;padding:36px 32px;display:flex;flex-direction:column;gap:18px;}
+.form-group{display:flex;flex-direction:column;gap:7px;}
+.form-group label{font-size:13px;font-weight:600;color:var(--blue-light);letter-spacing:0.5px;}
+.form-group input,.form-group select,.form-group textarea{
+  background:rgba(0,87,255,0.06);border:1px solid var(--border);border-radius:12px;
+  padding:12px 16px;color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;
+  outline:none;transition:0.3s;resize:none;
 }
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue-light);background:rgba(0,87,255,0.1);}
+.form-group select option{background:#0d1530;color:white;}
+.btn-submit{
+  padding:15px;background:var(--blue);color:white;border:none;border-radius:12px;
+  font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;cursor:pointer;
+  transition:0.3s;box-shadow:0 0 30px var(--blue-glow);display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.btn-submit:hover{background:var(--blue-light);transform:translateY(-2px);}
+.btn-submit svg{width:18px;height:18px;fill:white;}
+.cf-success{text-align:center;padding:14px;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:12px;color:#00ff88;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;}
+.cf-success svg{width:18px;height:18px;fill:#00ff88;}
+.contact-info{display:flex;flex-direction:column;gap:14px;}
+.contact-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:0.3s;}
+.contact-card:hover{border-color:rgba(61,139,255,0.4);transform:translateX(4px);}
+.contact-c-icon{width:40px;height:40px;border-radius:12px;background:rgba(0,87,255,0.13);border:1px solid rgba(61,139,255,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.contact-c-icon svg{width:18px;height:18px;fill:var(--blue-light);}
+.contact-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.contact-val{font-size:14px;font-weight:600;}
 
-.section-label {
-  text-align: center;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--blue-light);
-  margin-bottom: 14px;
-}
+/* CTA */
+.cta-section{padding:90px 20px;text-align:center;position:relative;overflow:hidden;}
+.cta-section::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(0,87,255,0.12) 0%,transparent 70%);pointer-events:none;}
+.cta-box{background:var(--surface);border:1px solid rgba(61,139,255,0.3);border-radius:36px;padding:70px 40px;max-width:680px;margin:0 auto;position:relative;}
+.cta-box h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,58px);letter-spacing:2px;margin-bottom:16px;}
+.cta-box p{color:var(--muted);font-size:16px;margin-bottom:36px;line-height:1.7;}
 
-.section-title {
-  text-align: center;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(36px, 6vw, 60px);
-  letter-spacing: 2px;
-  margin-bottom: 12px;
-}
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 20px;text-align:center;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:white;margin-bottom:8px;}
+.footer-logo span{color:var(--blue-light);}
+footer p{font-size:13px;color:var(--muted);}
+.footer-divider{width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);margin:16px auto;}
 
-.section-desc {
-  text-align: center;
-  color: var(--muted);
-  font-size: 16px;
-  max-width: 540px;
-  margin: 0 auto 55px;
-  line-height: 1.7;
-}
-
-/* ===== MAIN PLATFORMS ===== */
-.main-platforms {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-  gap: 24px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.platform-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 36px 32px;
-  position: relative;
-  overflow: hidden;
-  transition: 0.35s cubic-bezier(0.4,0,0.2,1);
-}
-.platform-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(0,87,255,0.07), transparent 60%);
-  opacity: 0;
-  transition: 0.35s;
-}
-.platform-card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(61,139,255,0.45);
-  box-shadow: 0 20px 60px rgba(0,87,255,0.2);
-}
-.platform-card:hover::before { opacity: 1; }
-
-.platform-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(0,87,255,0.12);
-  border: 1px solid rgba(61,139,255,0.3);
-  border-radius: 50px;
-  padding: 6px 14px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--blue-light);
-  margin-bottom: 20px;
-}
-
-.platform-icon-wrap {
-  width: 60px; height: 60px;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-.fb-icon { background: linear-gradient(135deg, #1877f2, #0a5dc9); }
-.ig-icon { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
-.tt-icon { background: linear-gradient(135deg, #010101, #ff0050); }
-
-.platform-icon-wrap svg { width: 30px; height: 30px; fill: white; }
-
-.platform-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 32px;
-  letter-spacing: 2px;
-  margin-bottom: 6px;
-}
-
-.platform-tag {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 24px;
-}
-
-.services-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.services-list li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  color: #c8d4f0;
-}
-.check {
-  width: 20px; height: 20px;
-  background: rgba(0,87,255,0.2);
-  border: 1px solid rgba(61,139,255,0.4);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.check svg { width: 11px; height: 11px; fill: var(--blue-light); }
-
-.more-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 18px;
-  font-size: 13px;
-  color: var(--blue-light);
-  font-weight: 600;
-}
-
-/* ===== ADDITIONAL PLATFORMS ===== */
-.addl-section { background: var(--bg2); }
-
-.addl-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 14px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.addl-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 20px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-align: center;
-  transition: 0.3s;
-  cursor: default;
-}
-.addl-card:hover {
-  border-color: rgba(61,139,255,0.45);
-  background: var(--surface2);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0,87,255,0.15);
-}
-.addl-icon {
-  width: 44px; height: 44px;
-  border-radius: 13px;
-  background: rgba(0,87,255,0.13);
-  border: 1px solid rgba(61,139,255,0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-}
-.addl-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: 0.5px;
-}
-
-/* ===== WHY US ===== */
-.why-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-.why-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 30px 26px;
-  transition: 0.3s;
-}
-.why-card:hover {
-  border-color: rgba(61,139,255,0.4);
-  transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(0,87,255,0.15);
-}
-.why-icon {
-  font-size: 32px;
-  margin-bottom: 16px;
-}
-.why-card h3 {
-  font-size: 17px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.why-card p {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-/* ===== MISSION/VISION ===== */
-.mv-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-@media(max-width:650px){ .mv-grid { grid-template-columns:1fr; } }
-
-.mv-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 26px;
-  padding: 40px 36px;
-  position: relative;
-  overflow: hidden;
-}
-.mv-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--blue), var(--cyan));
-}
-.mv-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 80px;
-  color: rgba(255,255,255,0.04);
-  position: absolute;
-  bottom: 10px; right: 20px;
-  line-height: 1;
-  pointer-events: none;
-}
-.mv-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--blue-light);
-  margin-bottom: 14px;
-}
-.mv-card h3 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 1.5px;
-  margin-bottom: 16px;
-}
-.mv-card p {
-  font-size: 15px;
-  color: var(--muted);
-  line-height: 1.8;
-}
-
-/* ===== CTA ===== */
-.cta-section {
-  padding: 90px 20px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.cta-section::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  width: 700px; height: 400px;
-  background: radial-gradient(ellipse, rgba(0,87,255,0.12) 0%, transparent 70%);
-  pointer-events: none;
-}
-.cta-box {
-  background: var(--surface);
-  border: 1px solid rgba(61,139,255,0.3);
-  border-radius: 36px;
-  padding: 70px 40px;
-  max-width: 680px;
-  margin: 0 auto;
-  position: relative;
-}
-.cta-box h2 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(36px,6vw,58px);
-  letter-spacing: 2px;
-  margin-bottom: 16px;
-}
-.cta-box p {
-  color: var(--muted);
-  font-size: 16px;
-  margin-bottom: 36px;
-  line-height: 1.7;
-}
-
-/* ===== FOOTER ===== */
-footer {
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-  padding: 40px 20px;
-  text-align: center;
-}
-.footer-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 2px;
-  color: white;
-  margin-bottom: 8px;
-}
-.footer-logo span { color: var(--blue-light); }
-footer p {
-  font-size: 13px;
-  color: var(--muted);
-}
-.footer-divider {
-  width: 60px; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--blue), transparent);
-  margin: 16px auto;
-}
-
-/* ===== DIVIDER ===== */
-.divider {
-  width: 60px; height: 3px;
-  background: linear-gradient(90deg, var(--blue), var(--cyan));
-  border-radius: 10px;
-  margin: 14px auto 0;
-}
-
-/* ===== RESPONSIVE ===== */
 @media(max-width:600px){
-  nav { padding: 14px 20px; }
-  .stats-row { gap: 24px; }
-  .addl-grid { grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); }
+  nav{padding:12px 18px;}
+  .stats-row{gap:24px;}
+  .addl-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+  .contact-form-box{padding:24px 18px;}
 }
 </style>
 </head>
 <body>
+
+<script>
+function toggleBurger(){
+  document.querySelector('.burger').classList.toggle('open');
+  document.querySelector('.mobile-menu').classList.toggle('open');
+}
+function closeMenu(){
+  document.querySelector('.burger').classList.remove('open');
+  document.querySelector('.mobile-menu').classList.remove('open');
+}
+function toggleFaq(el){
+  const answer=el.nextElementSibling;
+  const isOpen=el.classList.contains('open');
+  document.querySelectorAll('.faq-q').forEach(q=>{q.classList.remove('open');q.nextElementSibling.classList.remove('open');});
+  if(!isOpen){el.classList.add('open');answer.classList.add('open');}
+}
+function sendInquiry(){
+  const name=document.getElementById('cf-name').value.trim();
+  const fb=document.getElementById('cf-fb').value.trim();
+  const platform=document.getElementById('cf-platform').value;
+  const service=document.getElementById('cf-service').value.trim();
+  const msg=document.getElementById('cf-msg').value.trim();
+  if(!name||!platform||!service){alert('Please fill in your name, platform, and service needed.');return;}
+  window.open('https://www.facebook.com/messages/t/','_blank');
+  document.getElementById('cf-success').style.display='flex';
+  document.getElementById('cf-name').value='';
+  document.getElementById('cf-fb').value='';
+  document.getElementById('cf-platform').value='';
+  document.getElementById('cf-service').value='';
+  document.getElementById('cf-msg').value='';
+}
+</script>
 
 <div class="bg-orb orb1"></div>
 <div class="bg-orb orb2"></div>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">
-    <img src="assets/logo.png" alt="logo" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(61,139,255,0.5);">
+  <a class="nav-logo" href="#">
+    <img src="assets/logo.png" alt="logo" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid rgba(61,139,255,0.5);">
     JS<span>WEB</span>
-  </div>
-  <a class="nav-cta" href="https://facebook.com" target="_blank">
-    <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
-    Message Us
   </a>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#platforms">Platforms</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#how-to-order">How to Order</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-right">
+    <a class="nav-cta" href="https://facebook.com" target="_blank">
+      <svg width="15" height="15" fill="white" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
+      Message Us
+    </a>
+    <div class="burger" onclick="toggleBurger()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu">
+  <a href="#services" onclick="closeMenu()">
+    <div class="mob-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg></div>
+    Services
+  </a>
+  <a href="#platforms" onclick="closeMenu()">
+    <div class="mob-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+    Platforms
+  </a>
+  <a href="#pricing" onclick="closeMenu()">
+    <div class="mob-icon"><svg viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+    Pricing
+  </a>
+  <a href="#how-to-order" onclick="closeMenu()">
+    <div class="mob-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+    How to Order
+  </a>
+  <a href="#faq" onclick="closeMenu()">
+    <div class="mob-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    FAQ
+  </a>
+  <a href="#contact" onclick="closeMenu()">
+    <div class="mob-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+    Contact
+  </a>
+  <div class="mob-divider"></div>
+  <a class="mob-cta" href="https://m.facebook.com/JSWEBboostingservice/" target="_blank" onclick="closeMenu()">
+    <div class="mob-icon" style="background:rgba(255,255,255,0.15);border:none;"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg></div>
+    Message Us on Facebook
+  </a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-logo-wrap">
     <img src="assets/logo.png" alt="JSWEB Boosting Services Logo" class="hero-logo">
   </div>
-
   <div class="hero-badge">
     <div class="badge-dot"></div>
     Now Serving Clients Nationwide
   </div>
-
   <h1>
     <span class="accent">GROW</span><br>
     YOUR <span class="outline">SOCIAL</span><br>
     PRESENCE
   </h1>
-
-  <p class="hero-sub">
-    Fast, safe, and affordable boosting services for Facebook, Instagram, TikTok, and 14+ more platforms.
-  </p>
-
+  <p class="hero-sub">Fast, safe, and affordable boosting services for Facebook, Instagram, TikTok, and 14+ more platforms.</p>
   <div class="hero-btns">
     <a class="btn-primary" href="https://facebook.com" target="_blank">
-      💬 Order Now
+      <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
+      Order Now
     </a>
     <a class="btn-secondary" href="#services">
-      View Services ↓
+      View Services
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </a>
   </div>
-
   <div class="stats-row">
-    <div class="stat">
-      <div class="stat-num">17<span>+</span></div>
-      <div class="stat-label">Platforms</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">100<span>%</span></div>
-      <div class="stat-label">Safe & Secure</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">24<span>/7</span></div>
-      <div class="stat-label">Support</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">Fast<span>⚡</span></div>
-      <div class="stat-label">Delivery</div>
-    </div>
+    <div class="stat"><div class="stat-num">17<span>+</span></div><div class="stat-label">Platforms</div></div>
+    <div class="stat"><div class="stat-num">100<span>%</span></div><div class="stat-label">Safe &amp; Secure</div></div>
+    <div class="stat"><div class="stat-num">24<span>/7</span></div><div class="stat-label">Support</div></div>
+    <div class="stat"><div class="stat-num">Fast</div><div class="stat-label">Delivery</div></div>
   </div>
-
   <div class="scroll-hint">
     <div class="scroll-line"></div>
     Scroll
   </div>
 </section>
 
-<!-- MAIN SERVICES -->
+<!-- SERVICES -->
 <section class="section" id="services">
-  <p class="section-label">🔥 Top Platforms</p>
+  <p class="section-label">Top Platforms</p>
   <h2 class="section-title">Our Core Services</h2>
   <div class="divider"></div>
   <p class="section-desc">Premium boosting for the biggest platforms. Real engagement, fast delivery, affordable rates.</p>
-
   <div class="main-platforms">
 
-    <!-- FACEBOOK -->
     <div class="platform-card">
       <div class="platform-badge">
         <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
-        Account & Page
+        Account &amp; Page
       </div>
       <div class="platform-icon-wrap fb-icon">
         <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
@@ -725,16 +520,18 @@ footer p {
       <div class="platform-name">Facebook</div>
       <div class="platform-tag">Account / Page / Post Boosting</div>
       <ul class="services-list">
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Followers</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Reacts</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Shares</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Views</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Comments & Comment Reacts</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Followers</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Reacts</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Shares</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Views</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Comments &amp; Comment Reacts</li>
       </ul>
-      <div class="more-badge">🚀 And many more services</div>
+      <div class="more-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--blue-light)"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        And many more services
+      </div>
     </div>
 
-    <!-- INSTAGRAM -->
     <div class="platform-card">
       <div class="platform-badge">
         <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h10zm-5 3.5A5.5 5.5 0 1 0 17.5 13 5.5 5.5 0 0 0 12 7.5zm0 2A3.5 3.5 0 1 1 8.5 13 3.5 3.5 0 0 1 12 9.5zm5.75-3a1.25 1.25 0 1 0 1.25 1.25A1.25 1.25 0 0 0 17.75 6.5z"/></svg>
@@ -746,15 +543,17 @@ footer p {
       <div class="platform-name">Instagram</div>
       <div class="platform-tag">Profile / Reel / Post Boosting</div>
       <ul class="services-list">
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Followers</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Likes / Reacts</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Views</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Engagement</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Followers</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Likes / Reacts</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Views</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Engagement</li>
       </ul>
-      <div class="more-badge">🚀 And many more services</div>
+      <div class="more-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--blue-light)"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        And many more services
+      </div>
     </div>
 
-    <!-- TIKTOK -->
     <div class="platform-card">
       <div class="platform-badge">
         <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 0-3.77-1.52v3.3a1.84 1.84 0 0 1 1.29.51 1.8 1.8 0 0 1 .54 1.3v4.89a4.89 4.89 0 1 1-4.89-4.89h.22v3.31a1.57 1.57 0 1 0 1.57 1.58V2h3.27a4.84 4.84 0 0 0 1.77 3.63z"/></svg>
@@ -766,13 +565,16 @@ footer p {
       <div class="platform-name">TikTok</div>
       <div class="platform-tag">Profile / Video / Live Boosting</div>
       <ul class="services-list">
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Followers</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Heart Reacts / Likes</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Shares</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Views</li>
-        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2"/></svg></div>Comment Reacts</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Followers</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Heart Reacts / Likes</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Shares</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Views</li>
+        <li><div class="check"><svg viewBox="0 0 12 12"><path d="M1 6l3.5 3.5L11 2" stroke="#3d8bff" stroke-width="1.5" fill="none"/></svg></div>Comment Reacts</li>
       </ul>
-      <div class="more-badge">🚀 And many more services</div>
+      <div class="more-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--blue-light)"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        And many more services
+      </div>
     </div>
 
   </div>
@@ -780,64 +582,62 @@ footer p {
 
 <!-- ADDITIONAL PLATFORMS -->
 <section class="section addl-section" id="platforms">
-  <p class="section-label">✅ Additional Services</p>
+  <p class="section-label">Additional Services</p>
   <h2 class="section-title">More Platforms</h2>
   <div class="divider"></div>
   <p class="section-desc">We don't stop at the big three. Boost your presence across every major platform.</p>
-
   <div class="addl-grid">
-    <div class="addl-card"><div class="addl-icon">✈️</div><div class="addl-name">Telegram</div></div>
-    <div class="addl-card"><div class="addl-icon">⚔️</div><div class="addl-name">Mobile Legends</div></div>
-    <div class="addl-card"><div class="addl-icon">🔴</div><div class="addl-name">Reddit</div></div>
-    <div class="addl-card"><div class="addl-icon">🐦</div><div class="addl-name">X / Twitter</div></div>
-    <div class="addl-card"><div class="addl-icon">▶️</div><div class="addl-name">YouTube</div></div>
-    <div class="addl-card"><div class="addl-icon">💬</div><div class="addl-name">WhatsApp</div></div>
-    <div class="addl-card"><div class="addl-icon">🎮</div><div class="addl-name">Twitch</div></div>
-    <div class="addl-card"><div class="addl-icon">🎵</div><div class="addl-name">Spotify</div></div>
-    <div class="addl-card"><div class="addl-icon">💼</div><div class="addl-name">LinkedIn</div></div>
-    <div class="addl-card"><div class="addl-icon">🟢</div><div class="addl-name">Kick.com</div></div>
-    <div class="addl-card"><div class="addl-icon">🛍️</div><div class="addl-name">Shopee</div></div>
-    <div class="addl-card"><div class="addl-icon">🎭</div><div class="addl-name">Discord</div></div>
-    <div class="addl-card"><div class="addl-icon">🧵</div><div class="addl-name">Threads</div></div>
-    <div class="addl-card"><div class="addl-icon">🎲</div><div class="addl-name">Roblox</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 7.5a2.25 2.25 0 0 0 .126 4.14l4.358 1.521 1.671 5.15a.75.75 0 0 0 1.368.135l2.062-3.44 4.53 3.41a2.25 2.25 0 0 0 3.509-1.485l2.7-16.5a2.25 2.25 0 0 0-2.802-2.646z"/></svg></div><div class="addl-name">Telegram</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div><div class="addl-name">Mobile Legends</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.93 6h-2.18a8.28 8.28 0 0 0-.93-2.37A8 8 0 0 1 16.93 8zM12 4a8 8 0 0 1 1.09 4H10.91A8 8 0 0 1 12 4zm-1.82 2.63A8.28 8.28 0 0 0 9.25 8H7.07a8 8 0 0 1 3.11-1.37zM6.29 10h2.45a13.18 13.18 0 0 0-.07 2 13.18 13.18 0 0 0 .07 2H6.29a8 8 0 0 1 0-4zm.78 6h2.18a8.28 8.28 0 0 0 .93 2.37A8 8 0 0 1 7.07 16zm4.93 4a8 8 0 0 1-1.09-4h2.18A8 8 0 0 1 12 20zm1.82-1.63A8.28 8.28 0 0 0 14.75 16h2.18a8 8 0 0 1-3.11 1.37zM15.26 14a13.18 13.18 0 0 0 .07-2 13.18 13.18 0 0 0-.07-2h2.45a8 8 0 0 1 0 4z"/></svg></div><div class="addl-name">Reddit</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div><div class="addl-name">X / Twitter</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M23 7s-.3-1.9-1.2-2.7c-1.1-1.2-2.4-1.2-3-1.3C16.6 3 12 3 12 3s-4.6 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5.1 1 7 1 7S.7 9.1.7 11.2v2c0 2.1.3 4.2.3 4.2s.3 1.9 1.2 2.7c1.1 1.2 2.6 1.1 3.3 1.2C7.5 21.5 12 21.5 12 21.5s4.6 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.7 1.2-2.7s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zm-13.8 8.6V8.4l8.1 3.6-8.1 3.6z"/></svg></div><div class="addl-name">YouTube</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 16.682c-.244.687-.895 1.286-1.647 1.56-.5.18-1.076.253-2.11.097-1.31-.196-2.494-.784-3.476-1.507a12.28 12.28 0 0 1-2.475-2.554c-.748-1.035-1.26-2.21-1.39-3.448-.11-1.04.09-2.07.6-2.94.427-.72 1.13-1.19 1.908-1.19.221 0 .44.005.632.015.482.022.724.054.997.72.338.826.993 2.566.993 2.566.113.268.105.571-.041.802-.17.271-.444.44-.487.713-.042.27.15.514.295.71.79 1.073 1.726 1.867 2.827 2.427.193.1.395.18.608.18.303 0 .567-.165.754-.41.252-.334.499-.677.807-.934.195-.162.416-.222.63-.222.154 0 .31.03.446.083.55.21 1.84.884 1.84.884.15.07.246.152.276.263.116.42-.036 1.006-.187 1.423z"/></svg></div><div class="addl-name">WhatsApp</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></div><div class="addl-name">Twitch</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div><div class="addl-name">Spotify</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div><div class="addl-name">LinkedIn</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><div class="addl-name">Kick.com</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h12v2H3v-2zm0 4h18v2H3v-2zm0 4h12v2H3v-2z"/></svg></div><div class="addl-name">Shopee</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg></div><div class="addl-name">Discord</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.028-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-.505-1.858-1.396-3.318-2.653-4.34-1.358-1.09-3.221-1.666-5.531-1.694-2.917.024-5.08.87-6.43 2.515-1.305 1.588-1.968 3.93-1.99 6.956.022 3.026.683 5.369 1.988 6.957 1.351 1.645 3.515 2.491 6.43 2.515 2.096-.018 3.663-.486 4.805-1.432 1.32-1.085 2.097-2.857 2.31-5.268H12.18v-2.016h9.368c.073.557.11 1.094.11 1.61-.058 3.26-.978 5.824-2.738 7.622C17.444 23.267 15.077 24 12.186 24z"/></svg></div><div class="addl-name">Threads</div></div>
+    <div class="addl-card"><div class="addl-icon"><svg viewBox="0 0 24 24"><path d="M12 0a12 12 0 1 0 0 24A12 12 0 0 0 12 0zm0 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm4-14H8a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2zm-4 7l-4-2.5V11l4 2.5L16 11v3.5L12 17z"/></svg></div><div class="addl-name">Roblox</div></div>
   </div>
 </section>
 
 <!-- WHY US -->
 <section class="section">
-  <p class="section-label">💎 Why Choose Us</p>
+  <p class="section-label">Why Choose Us</p>
   <h2 class="section-title">What Makes Us Different</h2>
   <div class="divider"></div>
   <p class="section-desc">We've built a reputation for quality, speed, and trust.</p>
-
   <div class="why-grid">
     <div class="why-card">
-      <div class="why-icon">⚡</div>
+      <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
       <h3>Fast Delivery</h3>
       <p>Orders start processing immediately. Most services deliver within minutes to hours.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">🔒</div>
-      <h3>Safe & Secure</h3>
+      <div class="why-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <h3>Safe &amp; Secure</h3>
       <p>No passwords needed. We work strictly within platform-safe methods.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">💸</div>
+      <div class="why-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
       <h3>Affordable Rates</h3>
       <p>Competitive pricing that fits any budget — from starters to big creators.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">🎯</div>
+      <div class="why-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
       <h3>High Quality</h3>
       <p>Real-looking engagement that helps you build genuine credibility online.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">🤝</div>
+      <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
       <h3>Trusted Service</h3>
       <p>Hundreds of satisfied clients. We're here for the long run, not a one-time deal.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">📱</div>
+      <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
       <h3>24/7 Support</h3>
       <p>Got questions? Message us anytime on Facebook. We respond fast.</p>
     </div>
@@ -846,11 +646,10 @@ footer p {
 
 <!-- MISSION / VISION -->
 <section class="section addl-section">
-  <p class="section-label">🌟 Who We Are</p>
-  <h2 class="section-title">Mission & Vision</h2>
+  <p class="section-label">Who We Are</p>
+  <h2 class="section-title">Mission &amp; Vision</h2>
   <div class="divider"></div>
-  <p class="section-desc" style="margin-bottom: 40px;"></p>
-
+  <p class="section-desc" style="margin-bottom:40px;"></p>
   <div class="mv-grid">
     <div class="mv-card">
       <div class="mv-num">01</div>
@@ -867,13 +666,289 @@ footer p {
   </div>
 </section>
 
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <p class="section-label">Pricing</p>
+  <h2 class="section-title">Rate Card</h2>
+  <div class="divider"></div>
+  <p class="section-desc">Affordable rates for every budget. All prices are starting rates — message us for bulk discounts!</p>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-platform">
+        <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
+        Facebook
+      </div>
+      <div class="pricing-rows">
+        <div class="pricing-row"><span>Followers</span><span class="price">&#8369;100/150</span></div>
+        <div class="pricing-row"><span>Reacts</span><span class="price">&#8369;50</span></div>
+        <div class="pricing-row"><span>Shares</span><span class="price">&#8369;35</span></div>
+        <div class="pricing-row"><span>Views</span><span class="price">&#8369;40</span></div>
+        <div class="pricing-row"><span>Comments</span><span class="price">&#8369;60</span></div>
+      </div>
+      <div class="pricing-note">* Starts at minimum order</div>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-popular">Most Popular</div>
+      <div class="pricing-platform">
+        <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 0-3.77-1.52v3.3a1.84 1.84 0 0 1 1.29.51 1.8 1.8 0 0 1 .54 1.3v4.89a4.89 4.89 0 1 1-4.89-4.89h.22v3.31a1.57 1.57 0 1 0 1.57 1.58V2h3.27a4.84 4.84 0 0 0 1.77 3.63z"/></svg>
+        TikTok
+      </div>
+      <div class="pricing-rows">
+        <div class="pricing-row"><span>Followers</span><span class="price">&#8369;200</span></div>
+        <div class="pricing-row"><span>Heart Likes</span><span class="price">&#8369;50</span></div>
+        <div class="pricing-row"><span>Shares</span><span class="price">&#8369;35-100</span></div>
+        <div class="pricing-row"><span>Views</span><span class="price">&#8369;50</span></div>
+        <div class="pricing-row"><span>Comment Reacts</span><span class="price">&#8369;40</span></div>
+      </div>
+      <div class="pricing-note">* Starts at minimum order</div>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-platform">
+        <svg viewBox="0 0 24 24"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h10zm-5 3.5A5.5 5.5 0 1 0 17.5 13 5.5 5.5 0 0 0 12 7.5zm0 2A3.5 3.5 0 1 1 8.5 13 3.5 3.5 0 0 1 12 9.5zm5.75-3a1.25 1.25 0 1 0 1.25 1.25A1.25 1.25 0 0 0 17.75 6.5z"/></svg>
+        Instagram
+      </div>
+      <div class="pricing-rows">
+        <div class="pricing-row"><span>Followers</span><span class="price">&#8369;150</span></div>
+        <div class="pricing-row"><span>Likes</span><span class="price">&#8369;70</span></div>
+        <div class="pricing-row"><span>Views</span><span class="price">&#8369;50</span></div>
+        <div class="pricing-row"><span>Engagement</span><span class="price">&#8369;50</span></div>
+      </div>
+      <div class="pricing-note">* Starts at minimum order</div>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:30px;color:var(--muted);font-size:14px;">For exact pricing and bulk orders, message us directly on Facebook.</p>
+</section>
+
+<!-- HOW TO ORDER -->
+<section class="section addl-section" id="how-to-order">
+  <p class="section-label">Process</p>
+  <h2 class="section-title">How to Order</h2>
+  <div class="divider"></div>
+  <p class="section-desc">Simple and hassle-free ordering process. Done in minutes.</p>
+  <div class="steps-wrap">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-icon-wrap">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <h3>Message Us</h3>
+      <p>Send us a message on Facebook with what service you need and your profile or post link.</p>
+    </div>
+    <div class="step-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-icon-wrap">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <h3>Get a Quote</h3>
+      <p>We'll send you the exact price and details. No hidden fees, transparent pricing always.</p>
+    </div>
+    <div class="step-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-icon-wrap">
+        <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      </div>
+      <h3>Pay Securely</h3>
+      <p>Pay via GCash Payment ONLY! We'll confirm your payment right away.</p>
+    </div>
+    <div class="step-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-icon-wrap">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <h3>We Deliver</h3>
+      <p>Sit back and watch your numbers grow. Fast delivery, no password needed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" id="testimonials">
+  <p class="section-label">Reviews</p>
+  <h2 class="section-title">What Clients Say</h2>
+  <div class="divider"></div>
+  <p class="section-desc">Real feedback from real clients. We let our results speak for themselves.</p>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="testi-text">"Super bilis ng delivery! Nag-order ako ng 1K followers sa Facebook tapos within 1 hour nandoon na. Legit at sulit na sulit!"</p>
+      <div class="testi-author"><div class="testi-avatar">M</div><div><div class="testi-name">Mark A.</div><div class="testi-platform">Facebook Followers</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="testi-text">"Nag-try ako ng TikTok views dito, ang ganda ng resulta! Nag-viral pa yung video ko. Highly recommended sa lahat!"</p>
+      <div class="testi-author"><div class="testi-avatar">J</div><div><div class="testi-name">Jamaica R.</div><div class="testi-platform">TikTok Views</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="testi-text">"Affordable at mabilis mag-respond yung seller. Nag-order na ako ng maraming beses, laging consistent ang quality. 10/10!"</p>
+      <div class="testi-author"><div class="testi-avatar">R</div><div><div class="testi-name">Rina C.</div><div class="testi-platform">Instagram Followers</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="testi-text">"Safe ang transaksyon, walang kinuha na password. Legit ang service, magrereorder ulit ako soon. Salamat JSWEB!"</p>
+      <div class="testi-author"><div class="testi-avatar">D</div><div><div class="testi-name">Diego M.</div><div class="testi-platform">Facebook Reacts</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section addl-section" id="faq">
+  <p class="section-label">FAQ</p>
+  <h2 class="section-title">Frequently Asked Questions</h2>
+  <div class="divider"></div>
+  <p class="section-desc">Got questions? We got answers.</p>
+  <div class="faq-wrap">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Is it safe? Mababawasan ba yung account ko?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="faq-a">OO SAFE 100% at Hindi- Walang password na kailangan. 100% safe ang aming methods at hindi nakakasama sa iyong account.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Gaano kabilis ang delivery?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="faq-a">Depende sa order, pero karamihan sa aming services ay nagsisimula sa 1-30 minutes, Order SUCCESSFULLY First bago ang payment.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Anong payment methods ang tinatanggap?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="faq-a">Tumatanggap kami ng GCash payment, Lahat ng transactions ay may confirmation para sa inyong peace of mind.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>May minimum order ba?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="faq-a">Oo, may minimum order kami depende sa platform at service. Message kami sa Facebook para malaman ang exact minimum at pricing.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Mababawasan ba yung followers after delivery?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="faq-a">May slight drop na normal sa lahat ng boosting services, pero ginagawa naming mababa ito. Nag-oofrecemos din kami ng refill sa ilang services.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Puwede bang mag-order ng maraming platforms sabay?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="faq-a">Syempre! Puwede kang mag-order ng multiple platforms at services nang sabay. May bulk discount pa kami para sa malalaking orders!</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <p class="section-label">Contact</p>
+  <h2 class="section-title">Send Us a Message</h2>
+  <div class="divider"></div>
+  <p class="section-desc">Fill out the form and we'll get back to you via Facebook Messenger.</p>
+  <div class="contact-wrap">
+    <div class="contact-form-box">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" id="cf-name" placeholder="e.g. Juan dela Cruz">
+      </div>
+      <div class="form-group">
+        <label>Facebook Profile Link</label>
+        <input type="text" id="cf-fb" placeholder="https://m.facebook.com/JSWEBboostingservice/">
+      </div>
+      <div class="form-group">
+        <label>Platform</label>
+        <select id="cf-platform">
+          <option value="">-- Select Platform --</option>
+          <option>Facebook</option>
+          <option>Instagram</option>
+          <option>TikTok</option>
+          <option>YouTube</option>
+          <option>Telegram</option>
+          <option>Twitter / X</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Service Needed</label>
+        <input type="text" id="cf-service" placeholder="e.g. 1000 Followers">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="cf-msg" rows="4" placeholder="Any additional details about your order..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="sendInquiry()">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send Inquiry
+      </button>
+      <div id="cf-success" class="cf-success" style="display:none;">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Inquiry sent! We'll message you on Facebook soon.
+      </div>
+    </div>
+    <div class="contact-info">
+      <div class="contact-card">
+        <div class="contact-c-icon"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg></div>
+        <div><div class="contact-label">Facebook Page</div><div class="contact-val">JSWEB Boosting Service</div></div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-c-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div><div class="contact-label">Response Time</div><div class="contact-val">Usually within 15min - 1hour</div></div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-c-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="contact-label">Support Hours</div><div class="contact-val">24/7 — Always Open</div></div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-c-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div><div class="contact-label">Based In</div><div class="contact-val">Philippines</div></div>
+      </div>
+      <a class="btn-primary" href="https://facebook.com" target="_blank" style="justify-content:center;margin-top:6px;">
+        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
+        Message on Facebook
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section">
   <div class="cta-box">
     <h2>READY TO GROW?</h2>
-    <p>Message us on Facebook now and let's talk about the best service for your needs. Fast response, no BS.</p>
-    <a class="btn-primary" href="https://facebook.com" target="_blank" style="font-size:17px; padding:18px 44px;">
-      💬 Message Us on Facebook
+    <p>Message us on Facebook now and let's talk about the best service for your needs. Fast response, guaranteed.</p>
+    <a class="btn-primary" href="https://m.facebook.com/JSWEBboostingservice/" target="_blank" style="font-size:17px;padding:18px 44px;margin:0 auto;">
+      <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.77-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54V12h2.74l-.44 2.89h-2.3v6.99A10 10 0 0 0 22 12z"/></svg>
+      Message Us on Facebook
     </a>
   </div>
 </section>
@@ -881,11 +956,10 @@ footer p {
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">JS<span>WEB</span> Boosting Services</div>
-  <p>Fast • Safe • Affordable Social Media Boosting</p>
+  <p>Fast &bull; Safe &bull; Affordable Social Media Boosting</p>
   <div class="footer-divider"></div>
-  <p>© 2026 JSWEB Boosting Services. All Rights Reserved.</p>
+  <p>&copy; 2026 JSWEB Boosting Services. All Rights Reserved.</p>
 </footer>
 
 </body>
 </html>
-
